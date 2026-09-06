@@ -5,6 +5,8 @@ const btnRestart = document.querySelector("#btn-restart");
 const messageVictoire = document.querySelector("#message-victoire");
 
 let flippedCards = [];
+let coups = 0;
+let paires = 0;
 
 const images = [
     "images/img1.png",
@@ -29,18 +31,29 @@ function flipCard(event)
 {
     const clickedCard = event.target.closest('.card');
 
-    if (clickedCard.classList.contains('flipped') || flippedCards.length === 2) {
+    if (clickedCard.classList.contains('flipped') || flippedCards[0] === clickedCard|| flippedCards.length === 2) {
         return;
     }
     clickedCard.classList.add('flipped');
     flippedCards.push(clickedCard);
 
     if (flippedCards.length === 2) {
+        coups++;
+        coupsElement.textContent = coups;
+
         const img1 = flippedCards[0].querySelector('img').src;
         const img2 = flippedCards[1].querySelector('img').src;
         if (img1 === img2) {
+            paires++ ;
+            pairesElement.textContent = paires;
+
             flippedCards = [];
-        }else {
+        }
+        if(paires === 6){
+            messageVictoire.classList.remove('hidden')
+            messageVictoire.textContent = `Bravo ! Vous avez gagné en ${coups} coups !`;
+        }
+        else {
             setTimeout(()=> { 
             flippedCards[0].classList.remove('flipped')
             flippedCards[1].classList.remove('flipped')
@@ -68,5 +81,19 @@ function createBoard()
         card.addEventListener('click', flipCard);
     });
 }
+
+function restartGame() {
+    coups = 0;
+    paires = 0;
+    flippedCards = [];
+
+    coupsElement.textContent = coups;
+    pairesElement.textContent = paires;
+    messageVictoire.textContent = '';
+
+    createBoard();
+}
+
+btnRestart.addEventListener('click', restartGame);
 
 createBoard();
