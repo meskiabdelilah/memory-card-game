@@ -1,8 +1,10 @@
 const boardGame = document.querySelector("#game-board");
 const coupsElement = document.querySelector("#coups");
-const pairesElement = document.querySelector("paires");
+const pairesElement = document.querySelector("#paires");
 const btnRestart = document.querySelector("#btn-restart");
 const messageVictoire = document.querySelector("#message-victoire");
+
+let flippedCards = [];
 
 const images = [
     "images/img1.png",
@@ -22,6 +24,33 @@ function shuffle(array) {
 }
 // console.log(shuffle(cardsData));
 
+
+function flipCard(event)
+{
+    const clickedCard = event.target.closest('.card');
+
+    if (clickedCard.classList.contains('flipped') || flippedCards.length === 2) {
+        return;
+    }
+    clickedCard.classList.add('flipped');
+    flippedCards.push(clickedCard);
+
+    if (flippedCards.length === 2) {
+        const img1 = flippedCards[0].querySelector('img').src;
+        const img2 = flippedCards[1].querySelector('img').src;
+        if (img1 === img2) {
+            flippedCards = [];
+        }else {
+            setTimeout(()=> { 
+            flippedCards[0].classList.remove('flipped')
+            flippedCards[1].classList.remove('flipped')
+            flippedCards = [];
+            },1000)
+        }
+    }
+}
+
+
 function createBoard()
 {
     boardGame.innerHTML = '';
@@ -36,6 +65,7 @@ function createBoard()
         
         card.appendChild(cardImg);
         boardGame.appendChild(card);
+        card.addEventListener('click', flipCard);
     });
 }
 
