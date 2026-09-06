@@ -21,3 +21,22 @@ function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 // console.log(shuffle(cardsData));
+
+function createBoard()
+{
+    boardGame.innerHTML = '';
+    const shuffleCards = shuffle([...cardsData]);
+    shuffleCards.forEach(cardImage => {
+        // creer le div de card
+        const card = document.createElement('div');
+        card.classList.add('card');
+        
+        const cardImg = document.createElement('img');
+        cardImg.src = cardImage;
+        
+        card.appendChild(cardImg);
+        boardGame.appendChild(card);
+    });
+}
+
+createBoard();
